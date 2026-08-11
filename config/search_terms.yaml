@@ -1,0 +1,7 @@
+search_terms:
+  - id: reforma-tributaria
+    query: "reforma tributária"
+    enabled: true
+  - id: eleicoes-2026
+    query: "eleições 2026"
+    enabled: true

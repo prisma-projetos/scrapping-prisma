@@ -1,0 +1,7 @@
+feedparser
+requests
+trafilatura
+PyYAML
+psycopg[binary]
+python-dotenv
+googlenewsdecoder

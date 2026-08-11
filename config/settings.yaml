@@ -1,0 +1,15 @@
+rss:
+  hl: pt-BR
+  gl: BR
+  ceid: "BR:pt-BR"
+
+scraping:
+  min_delay_seconds: 2
+  max_delay_seconds: 5
+  timeout_seconds: 10
+  max_retries: 3
+  paywall_min_chars: 500
+  user_agent: "PoliticaNewsCollector/0.1 (+contato: bbarreto953@gmail.com)"
+
+logging:
+  log_path: "logs/politica.log"
