@@ -5,3 +5,5 @@ PyYAML
 psycopg[binary]
 python-dotenv
 googlenewsdecoder
+lxml
+pytest

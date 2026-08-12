@@ -6,39 +6,61 @@ import trafilatura
 from googlenewsdecoder import gnewsdecoder
 
 from scraping_utils import BlockedError, fetch_with_retry, is_allowed_by_robots, sleep_with_jitter
+from url_utils import extract_canonical_from_html
+
+
+@dataclass
+class ResolvedLink:
+    resolved_link: str | None
+    error: str | None
+
+
+def resolve_google_link(google_link: str, *, interval: int = 1) -> ResolvedLink:
+    """Decodifica o link ofuscado do RSS do Google News para a URL real do
+    veículo. Não é mais um redirect HTTP simples desde uma mudança do
+    Google em 2024 — é assim que o feed público funciona hoje, não é um
+    mecanismo de segurança sendo contornado. Separado de `extract_article`
+    porque precisa rodar *antes* do find-or-create (para calcular o
+    `canonical_link` usado na deduplicação) e não deve ser chamado duas
+    vezes para o mesmo item."""
+    try:
+        decoded = gnewsdecoder(google_link, interval=interval)
+    except Exception as exc:
+        return ResolvedLink(resolved_link=None, error=f"falha ao decodificar link: {exc}")
+
+    if not decoded.get("status"):
+        return ResolvedLink(resolved_link=None, error=f"falha ao decodificar link: {decoded.get('message')}")
+
+    return ResolvedLink(resolved_link=decoded["decoded_url"], error=None)
 
 
 @dataclass
 class ExtractionResult:
     resolved_link: str | None
+    html_canonical_link: str | None
     full_text: str | None
-    status: str  # success / blocked / paywalled / failed / skipped_robots
+    author: str | None
+    status: str  # success / paywalled / blocked / failed / skipped_robots / empty
     error: str | None
 
 
-def extract_article(google_link: str, settings: dict) -> ExtractionResult:
+def extract_article(resolved_link: str, settings: dict) -> ExtractionResult:
+    """Recebe o link já resolvido (ver `resolve_google_link`) — não
+    decodifica nada aqui, só verifica robots.txt, respeita o rate limit,
+    busca a página e extrai o conteúdo."""
     scraping = settings["scraping"]
     user_agent = scraping["user_agent"]
     timeout_seconds = scraping["timeout_seconds"]
 
-    # O link do RSS do Google News não é mais um redirect HTTP simples: é uma
-    # página interstitial cujo destino real só sai decodificando um token
-    # assinado pelo próprio Google (é assim que o feed público funciona hoje,
-    # não é um mecanismo de segurança sendo contornado).
-    try:
-        decoded = gnewsdecoder(google_link, interval=1)
-    except Exception as exc:
-        return ExtractionResult(resolved_link=None, full_text=None, status="failed", error=f"falha ao decodificar link: {exc}")
-
-    if not decoded.get("status"):
-        return ExtractionResult(
-            resolved_link=None, full_text=None, status="failed", error=f"falha ao decodificar link: {decoded.get('message')}"
-        )
-
-    resolved_link = decoded["decoded_url"]
-
     if not is_allowed_by_robots(resolved_link, user_agent, timeout_seconds):
-        return ExtractionResult(resolved_link=resolved_link, full_text=None, status="skipped_robots", error=None)
+        return ExtractionResult(
+            resolved_link=resolved_link,
+            html_canonical_link=None,
+            full_text=None,
+            author=None,
+            status="skipped_robots",
+            error=None,
+        )
 
     sleep_with_jitter(scraping["min_delay_seconds"], scraping["max_delay_seconds"])
 
@@ -50,17 +72,56 @@ def extract_article(google_link: str, settings: dict) -> ExtractionResult:
             max_retries=scraping["max_retries"],
         )
     except BlockedError as exc:
-        return ExtractionResult(resolved_link=resolved_link, full_text=None, status="blocked", error=str(exc))
+        return ExtractionResult(
+            resolved_link=resolved_link,
+            html_canonical_link=None,
+            full_text=None,
+            author=None,
+            status="blocked",
+            error=str(exc),
+        )
     except Exception as exc:
-        return ExtractionResult(resolved_link=resolved_link, full_text=None, status="failed", error=str(exc))
+        return ExtractionResult(
+            resolved_link=resolved_link,
+            html_canonical_link=None,
+            full_text=None,
+            author=None,
+            status="failed",
+            error=str(exc),
+        )
 
     final_url = response.url
-    text = trafilatura.extract(response.text, url=final_url)
+    html_canonical_link = extract_canonical_from_html(response.text, final_url)
+
+    document = trafilatura.bare_extraction(response.text, url=final_url, with_metadata=True)
+    text = document.text if document else None
+    author = document.author if document else None
 
     if not text:
-        return ExtractionResult(resolved_link=final_url, full_text=None, status="failed", error="trafilatura não extraiu conteúdo")
+        return ExtractionResult(
+            resolved_link=final_url,
+            html_canonical_link=html_canonical_link,
+            full_text=None,
+            author=author,
+            status="empty",
+            error="trafilatura não extraiu conteúdo",
+        )
 
     if len(text) < scraping["paywall_min_chars"]:
-        return ExtractionResult(resolved_link=final_url, full_text=text, status="paywalled", error=None)
+        return ExtractionResult(
+            resolved_link=final_url,
+            html_canonical_link=html_canonical_link,
+            full_text=text,
+            author=author,
+            status="paywalled",
+            error=None,
+        )
 
-    return ExtractionResult(resolved_link=final_url, full_text=text, status="success", error=None)
+    return ExtractionResult(
+        resolved_link=final_url,
+        html_canonical_link=html_canonical_link,
+        full_text=text,
+        author=author,
+        status="success",
+        error=None,
+    )

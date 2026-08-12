@@ -1,3 +1,9 @@
+-- HISTÓRICO — não é mais aplicado em runtime. Este arquivo era executado
+-- inteiro a cada execução do script antes da introdução do sistema de
+-- migrations (db/migrations/). Sua cópia congelada é 0001_baseline.sql;
+-- o schema atual é o resultado de aplicar 0001..N em sequência.
+-- Mantido só como referência do estado inicial do projeto.
+
 CREATE TABLE IF NOT EXISTS articles (
     id SERIAL PRIMARY KEY,
     guid TEXT NOT NULL UNIQUE,

@@ -1,7 +1,563 @@
 search_terms:
-  - id: reforma-tributaria
-    query: "reforma tributária"
+
+  # =========================================================
+  # POLÍTICOS E AUTORIDADES NACIONAIS
+  # =========================================================
+
+  - id: lula
+    query: '"Lula" OR "Luiz Inácio Lula da Silva"'
+    category: politician
+    entity: lula
     enabled: true
+
+  - id: jair-bolsonaro
+    query: '"Jair Bolsonaro"'
+    category: politician
+    entity: jair-bolsonaro
+    enabled: true
+
+  - id: geraldo-alckmin
+    query: '"Geraldo Alckmin"'
+    category: politician
+    entity: geraldo-alckmin
+    enabled: true
+
+  - id: fernando-haddad
+    query: '"Fernando Haddad"'
+    category: politician
+    entity: fernando-haddad
+    enabled: true
+
+  - id: tarcisio-de-freitas
+    query: '"Tarcísio de Freitas" OR "Tarcisio de Freitas"'
+    category: politician
+    entity: tarcisio-de-freitas
+    enabled: true
+
+  - id: flavio-bolsonaro
+    query: '"Flávio Bolsonaro" OR "Flavio Bolsonaro"'
+    category: politician
+    entity: flavio-bolsonaro
+    enabled: true
+
+  - id: michelle-bolsonaro
+    query: '"Michelle Bolsonaro"'
+    category: politician
+    entity: michelle-bolsonaro
+    enabled: true
+
+  - id: eduardo-bolsonaro
+    query: '"Eduardo Bolsonaro"'
+    category: politician
+    entity: eduardo-bolsonaro
+    enabled: true
+
+  - id: ciro-gomes
+    query: '"Ciro Gomes"'
+    category: politician
+    entity: ciro-gomes
+    enabled: true
+
+  - id: ronaldo-caiado
+    query: '"Ronaldo Caiado"'
+    category: politician
+    entity: ronaldo-caiado
+    enabled: true
+
+  - id: ratinho-junior
+    query: '"Ratinho Junior" OR "Carlos Massa Ratinho Junior"'
+    category: politician
+    entity: ratinho-junior
+    enabled: true
+
+  - id: romeu-zema
+    query: '"Romeu Zema"'
+    category: politician
+    entity: romeu-zema
+    enabled: true
+
+  - id: marina-silva
+    query: '"Marina Silva"'
+    category: politician
+    entity: marina-silva
+    enabled: true
+
+  - id: simone-tebet
+    query: '"Simone Tebet"'
+    category: politician
+    entity: simone-tebet
+    enabled: true
+
+  - id: guilherme-boulos
+    query: '"Guilherme Boulos"'
+    category: politician
+    entity: guilherme-boulos
+    enabled: true
+
+  - id: nikolas-ferreira
+    query: '"Nikolas Ferreira"'
+    category: politician
+    entity: nikolas-ferreira
+    enabled: true
+
+  - id: arthur-lira
+    query: '"Arthur Lira"'
+    category: politician
+    entity: arthur-lira
+    enabled: true
+
+  - id: hugo-motta
+    query: '"Hugo Motta"'
+    category: politician
+    entity: hugo-motta
+    enabled: true
+
+  - id: davi-alcolumbre
+    query: '"Davi Alcolumbre"'
+    category: politician
+    entity: davi-alcolumbre
+    enabled: true
+
+  - id: alexandre-de-moraes
+    query: '"Alexandre de Moraes"'
+    category: authority
+    entity: alexandre-de-moraes
+    enabled: true
+
+  # =========================================================
+  # PARTIDOS
+  # Usar nome completo reduz ambiguidades de siglas como PT,
+  # PL, PP, Rede e Novo.
+  # =========================================================
+
+  - id: partido-dos-trabalhadores
+    query: '"Partido dos Trabalhadores" OR "PT de Lula"'
+    category: party
+    entity: pt
+    enabled: true
+
+  - id: partido-liberal
+    query: '"Partido Liberal" Bolsonaro'
+    category: party
+    entity: pl
+    enabled: true
+
+  - id: movimento-democratico-brasileiro
+    query: '"Movimento Democrático Brasileiro" OR "partido MDB"'
+    category: party
+    entity: mdb
+    enabled: true
+
+  - id: partido-social-democratico
+    query: '"Partido Social Democrático" OR "partido PSD"'
+    category: party
+    entity: psd
+    enabled: true
+
+  - id: uniao-brasil
+    query: '"União Brasil" partido'
+    category: party
+    entity: uniao-brasil
+    enabled: true
+
+  - id: progressistas
+    query: '"Progressistas" partido OR "partido PP"'
+    category: party
+    entity: progressistas
+    enabled: true
+
+  - id: republicanos
+    query: '"Republicanos" partido'
+    category: party
+    entity: republicanos
+    enabled: true
+
+  - id: psol
+    query: '"Partido Socialismo e Liberdade" OR "partido PSOL"'
+    category: party
+    entity: psol
+    enabled: true
+
+  - id: partido-novo
+    query: '"Partido Novo" política'
+    category: party
+    entity: novo
+    enabled: true
+
+  - id: pdt
+    query: '"Partido Democrático Trabalhista" OR "partido PDT"'
+    category: party
+    entity: pdt
+    enabled: true
+
+  - id: psb
+    query: '"Partido Socialista Brasileiro" OR "partido PSB"'
+    category: party
+    entity: psb
+    enabled: true
+
+  - id: podemos
+    query: '"Podemos" partido política'
+    category: party
+    entity: podemos
+    enabled: true
+
+  - id: rede-sustentabilidade
+    query: '"Rede Sustentabilidade" partido'
+    category: party
+    entity: rede
+    enabled: true
+
+  - id: solidariedade
+    query: '"Solidariedade" partido política'
+    category: party
+    entity: solidariedade
+    enabled: true
+
+  # =========================================================
+  # FEDERAÇÕES E ARTICULAÇÕES PARTIDÁRIAS
+  # =========================================================
+
+  - id: federacao-brasil-da-esperanca
+    query: '"Federação Brasil da Esperança"'
+    category: federation
+    entity: fe-brasil
+    enabled: true
+
+  - id: federacao-psol-rede
+    query: '"Federação PSOL Rede"'
+    category: federation
+    entity: psol-rede
+    enabled: true
+
+  - id: federacao-psdb-cidadania
+    query: '"Federação PSDB Cidadania"'
+    category: federation
+    entity: psdb-cidadania
+    enabled: true
+
+  - id: base-do-governo
+    query: '"base do governo" Lula'
+    category: political_group
+    entity: base-governo
+    enabled: true
+
+  - id: oposicao-ao-governo
+    query: '"oposição ao governo" Lula'
+    category: political_group
+    entity: oposicao-governo
+    enabled: true
+
+  - id: centrão
+    query: '"Centrão" política'
+    category: political_group
+    entity: centrao
+    enabled: true
+
+  # =========================================================
+  # ELEIÇÕES DE 2026
+  # =========================================================
+
   - id: eleicoes-2026
-    query: "eleições 2026"
+    query: '"eleições 2026" Brasil'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  - id: candidatos-presidencia-2026
+    query: '"candidatos à Presidência" 2026 OR "candidatos a presidente" 2026'
+    category: election
+    entity: presidencia-2026
+    enabled: true
+
+  - id: campanha-presidencial-2026
+    query: '"campanha presidencial" 2026 Brasil'
+    category: election
+    entity: presidencia-2026
+    enabled: true
+
+  - id: pesquisas-eleitorais-2026
+    query: '"pesquisa eleitoral" presidente 2026'
+    category: election
+    entity: presidencia-2026
+    enabled: true
+
+  - id: debates-presidenciais-2026
+    query: '"debate presidencial" 2026'
+    category: election
+    entity: presidencia-2026
+    enabled: true
+
+  - id: propostas-presidenciais-2026
+    query: '"propostas de governo" presidente 2026'
+    category: election
+    entity: presidencia-2026
+    enabled: true
+
+  - id: aliancas-eleitorais-2026
+    query: '"aliança eleitoral" 2026 OR "coligação eleitoral" 2026'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  - id: convencoes-partidarias-2026
+    query: '"convenções partidárias" 2026'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  - id: financiamento-eleitoral-2026
+    query: '"financiamento eleitoral" 2026 OR "fundo eleitoral" 2026'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  - id: propaganda-eleitoral-2026
+    query: '"propaganda eleitoral" 2026'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  - id: desinformacao-eleitoral-2026
+    query: '"desinformação eleitoral" 2026 OR "fake news nas eleições" 2026'
+    category: election
+    entity: eleicoes-2026
+    enabled: true
+
+  # =========================================================
+  # INSTITUIÇÕES E RELAÇÕES DE PODER
+  # =========================================================
+
+  - id: governo-federal
+    query: '"governo federal" política Brasil'
+    category: institution
+    entity: governo-federal
+    enabled: true
+
+  - id: congresso-nacional
+    query: '"Congresso Nacional" governo oposição'
+    category: institution
+    entity: congresso-nacional
+    enabled: true
+
+  - id: camara-dos-deputados
+    query: '"Câmara dos Deputados" governo oposição'
+    category: institution
+    entity: camara-deputados
+    enabled: true
+
+  - id: senado-federal
+    query: '"Senado Federal" governo oposição'
+    category: institution
+    entity: senado-federal
+    enabled: true
+
+  - id: supremo-tribunal-federal
+    query: '"Supremo Tribunal Federal" política'
+    category: institution
+    entity: stf
+    enabled: true
+
+  - id: tribunal-superior-eleitoral
+    query: '"Tribunal Superior Eleitoral" eleições política'
+    category: institution
+    entity: tse
+    enabled: true
+
+  - id: relacao-governo-congresso
+    query: '"governo Lula" Congresso'
+    category: institution
+    entity: governo-congresso
+    enabled: true
+
+  - id: relacao-governo-stf
+    query: '"governo Lula" STF'
+    category: institution
+    entity: governo-stf
+    enabled: true
+
+  # =========================================================
+  # TEMAS POLÍTICOS E POLÍTICAS PÚBLICAS
+  # =========================================================
+
+  - id: economia-governo
+    query: '"governo Lula" economia'
+    category: topic
+    entity: governo-lula
+    topic: economy
+    enabled: true
+
+  - id: inflacao-governo
+    query: '"governo Lula" inflação'
+    category: topic
+    entity: governo-lula
+    topic: inflation
+    enabled: true
+
+  - id: emprego-governo
+    query: '"governo Lula" emprego OR desemprego'
+    category: topic
+    entity: governo-lula
+    topic: employment
+    enabled: true
+
+  - id: gastos-publicos
+    query: '"gastos públicos" governo'
+    category: topic
+    entity: governo-federal
+    topic: public_spending
+    enabled: true
+
+  - id: politica-fiscal
+    query: '"política fiscal" governo'
+    category: topic
+    entity: governo-federal
+    topic: fiscal_policy
+    enabled: true
+
+  - id: reforma-tributaria
+    query: '"reforma tributária" governo partidos'
+    category: topic
+    entity: reforma-tributaria
+    topic: taxation
+    enabled: true
+
+  - id: seguranca-publica
+    query: '"segurança pública" governo partidos'
+    category: topic
+    entity: seguranca-publica
+    topic: public_security
+    enabled: true
+
+  - id: educacao
+    query: 'educação "governo federal" partidos'
+    category: topic
+    entity: educacao
+    topic: education
+    enabled: true
+
+  - id: saude
+    query: 'saúde "governo federal" partidos'
+    category: topic
+    entity: saude
+    topic: healthcare
+    enabled: true
+
+  - id: meio-ambiente
+    query: '"meio ambiente" governo partidos'
+    category: topic
+    entity: meio-ambiente
+    topic: environment
+    enabled: true
+
+  - id: amazonia
+    query: 'Amazônia governo política'
+    category: topic
+    entity: amazonia
+    topic: environment
+    enabled: true
+
+  - id: direitos-humanos
+    query: '"direitos humanos" governo partidos'
+    category: topic
+    entity: direitos-humanos
+    topic: human_rights
+    enabled: true
+
+  - id: aborto
+    query: 'aborto governo partidos Congresso'
+    category: topic
+    entity: aborto
+    topic: reproductive_rights
+    enabled: true
+
+  - id: armas
+    query: 'armas desarmamento governo partidos'
+    category: topic
+    entity: armas
+    topic: gun_policy
+    enabled: true
+
+  - id: drogas
+    query: 'drogas descriminalização governo partidos STF'
+    category: topic
+    entity: drogas
+    topic: drug_policy
+    enabled: true
+
+  - id: privatizacoes
+    query: 'privatização OR privatizações governo partidos'
+    category: topic
+    entity: privatizacoes
+    topic: privatization
+    enabled: true
+
+  - id: programas-sociais
+    query: '"programas sociais" governo partidos'
+    category: topic
+    entity: programas-sociais
+    topic: social_policy
+    enabled: true
+
+  - id: bolsa-familia
+    query: '"Bolsa Família" governo oposição'
+    category: topic
+    entity: bolsa-familia
+    topic: social_policy
+    enabled: true
+
+  - id: previdencia
+    query: 'Previdência governo partidos reforma'
+    category: topic
+    entity: previdencia
+    topic: pension_policy
+    enabled: true
+
+  - id: trabalho-escala-6x1
+    query: '"escala 6x1" governo partidos Congresso'
+    category: topic
+    entity: escala-6x1
+    topic: labor
+    enabled: true
+
+  - id: inteligencia-artificial-regulacao
+    query: '"inteligência artificial" regulamentação governo Congresso'
+    category: topic
+    entity: regulacao-ia
+    topic: technology
+    enabled: true
+
+  - id: redes-sociais-regulacao
+    query: '"regulação das redes sociais" governo Congresso'
+    category: topic
+    entity: regulacao-redes
+    topic: technology
+    enabled: true
+
+  - id: liberdade-de-expressao
+    query: '"liberdade de expressão" governo STF partidos'
+    category: topic
+    entity: liberdade-expressao
+    topic: civil_rights
+    enabled: true
+
+  - id: corrupcao
+    query: 'corrupção governo partidos investigação'
+    category: topic
+    entity: corrupcao
+    topic: corruption
+    enabled: true
+
+  - id: emendas-parlamentares
+    query: '"emendas parlamentares" governo Congresso'
+    category: topic
+    entity: emendas-parlamentares
+    topic: public_budget
+    enabled: true
+
+  - id: politica-externa
+    query: '"política externa" governo Lula'
+    category: topic
+    entity: governo-lula
+    topic: foreign_policy
     enabled: true
