@@ -1,0 +1,40 @@
+name: Pipeline Completa - Build, Manifestos e Deploy ArgoCD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  # 2. STAGE DE BUILD
+  build_docker:
+    uses: projetos-periodo-8/pipelines/.gitea/workflows/build-docker.yml@main
+    with:
+      registry_url: "gitea.intranet.ajvale.com.br"
+      repository: ${{ gitea.repository }}
+      ref_name: ${{ gitea.ref_name }}
+      sha: ${{ gitea.sha }}
+    secrets: inherit
+
+  # 3. STAGE DE MANIFESTOS
+  update_manifests:
+    needs: build_docker
+    uses: projetos-periodo-8/pipelines/.gitea/workflows/update-manifests.yml@main
+    with:
+      registry_url: "gitea.intranet.ajvale.com.br"
+      branch_slug: ${{ needs.build_docker.outputs.branch_slug }}
+      image_tag: ${{ needs.build_docker.outputs.image_tag }}
+      image_name: ${{ needs.build_docker.outputs.image_name }}
+      project_name: ${{ gitea.event.repository.name }}
+    secrets: inherit
+
+  # 4. STAGE DE DEPLOY
+  deploy_argocd:
+    needs: [build_docker, update_manifests]
+    uses: projetos-periodo-8/pipelines/.gitea/workflows/deploy-argocd.yml@main
+    with:
+      registry_url: "gitea.intranet.ajvale.com.br"
+      branch_slug: ${{ needs.build_docker.outputs.branch_slug }}
+      project_name: ${{ gitea.event.repository.name }}
+    secrets: inherit

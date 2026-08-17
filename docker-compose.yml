@@ -10,6 +10,29 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - politica_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: "no"
+    env_file:
+      - .env
+    environment:
+      # dentro da rede do compose o Postgres é acessado pelo nome do serviço,
+      # não por localhost (isso sobrescreve o valor que vier do .env)
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
 
 volumes:
   politica_pgdata:
