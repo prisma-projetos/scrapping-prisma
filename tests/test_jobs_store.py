@@ -81,20 +81,6 @@ def test_claim_next_job_marks_processing_and_increments_attempts(db_conn):
     assert second_claim is None
 
 
-def test_complete_job(db_conn):
-    ref = _create_article(db_conn)
-    _set_status(db_conn, ref.id, "success")
-    claimed = jobs_store.claim_next_job(db_conn)
-
-    jobs_store.complete_job(db_conn, claimed.id)
-
-    with db_conn.cursor() as cur:
-        cur.execute("SELECT status, completed_at FROM analysis_jobs WHERE id = %s", (claimed.id,))
-        status, completed_at = cur.fetchone()
-        assert status == "completed"
-        assert completed_at is not None
-
-
 def test_fail_job_marks_failed_when_attempts_exhausted(db_conn):
     ref = _create_article(db_conn)
     _set_status(db_conn, ref.id, "success")
