@@ -6,4 +6,5 @@ psycopg[binary]
 python-dotenv
 googlenewsdecoder
 lxml
+pika
 pytest

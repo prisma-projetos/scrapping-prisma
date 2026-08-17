@@ -50,10 +50,15 @@ def claim_next_job(conn: psycopg.Connection, *, pipeline_version: str = DEFAULT_
     return AnalysisJobRef(id=job_id, article_id=article_id, pipeline_version=version)
 
 
-def complete_job(conn: psycopg.Connection, job_id: int) -> None:
+def mark_published(conn: psycopg.Connection, job_id: int) -> None:
+    """Marca o job como publicado com sucesso no RabbitMQ (fronteira
+    Scraper->Classifier, ver context.md raiz seção 7.3). O status gravado é
+    'published_job' (não 'published') para não ficar ambíguo com
+    `article.published_at`, que é a data em que a notícia foi publicada
+    pelo veículo original -- conceito diferente do status deste job."""
     with conn.cursor() as cur:
         cur.execute(
-            "UPDATE analysis_jobs SET status = 'completed', completed_at = now() WHERE id = %s",
+            "UPDATE analysis_jobs SET status = 'published_job', completed_at = now() WHERE id = %s",
             (job_id,),
         )
     conn.commit()

@@ -137,6 +137,44 @@ def find_or_create_article(
         return ArticleRef(id=article_id, extraction_status=status, is_new=False)
 
 
+@dataclass(frozen=True)
+class ArticleForPublishing:
+    id: int
+    title: str
+    full_text: str | None
+    canonical_link: str | None
+    source_name: str | None
+    published_at: datetime | None
+
+
+def find_for_publishing(conn: psycopg.Connection, article_id: int) -> ArticleForPublishing | None:
+    """Busca só os campos que o publisher (fila de análise -> RabbitMQ,
+    ver src/jobs_publisher.py) precisa embutir no payload publicado -- o
+    Classifier nunca acessa este Postgres, então o conteúdo precisa viajar
+    na mensagem, não só o `article_id`."""
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT id, title, full_text, canonical_link, source_name, published_at
+            FROM articles
+            WHERE id = %s
+            """,
+            (article_id,),
+        )
+        row = cur.fetchone()
+    if row is None:
+        return None
+    article_id, title, full_text, canonical_link, source_name, published_at = row
+    return ArticleForPublishing(
+        id=article_id,
+        title=title,
+        full_text=full_text,
+        canonical_link=canonical_link,
+        source_name=source_name,
+        published_at=published_at,
+    )
+
+
 def claim_for_extraction(conn: psycopg.Connection, article_id: int) -> bool:
     """Marca o artigo como 'processing' atomicamente, só se ele estava num
     estado recuperável. Retorna False se outro processo/execução já
