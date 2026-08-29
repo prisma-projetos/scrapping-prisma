@@ -264,6 +264,8 @@ Nem `src/main.py` nem `src/publish_jobs.py` têm scheduler embutido — cada exe
 
 Adicionar, desabilitar ou editar um termo é só mudar o YAML — a próxima execução sincroniza sozinha (`upsert`, nunca apaga termos ausentes do arquivo). Se o YAML tiver um problema (campo obrigatório faltando, `id` duplicado, `retrieval_type` inválido), o script para antes de coletar e informa exatamente qual termo e qual campo.
 
+**Escopo da v1 (Classifier)** — a v1 do `classifier-prisma` só classifica notícias sobre candidatos a presidente/vice-presidente e os partidos vinculados a eles (critério TSE). Por isso, os termos com `category: federation`, `political_group`, `election`, `institution` e `topic` estão com `enabled: false`: eles cobrem federações partidárias, eleições em geral, instituições e temas de política pública que não citam um candidato ou partido específico do escopo, e não geram classificação nessa fase. Os termos ficam desabilitados, não removidos do arquivo, justamente para poder reativar rápido numa fase futura em que o escopo for ampliado — basta mudar `enabled: true` no termo desejado.
+
 `config/settings.yaml` — parâmetros técnicos: delay entre requisições, timeout, número de tentativas, limiar de caracteres para detectar paywall, User-Agent usado nas requisições.
 
 `.env` — credenciais do Postgres (`POSTGRES_HOST/PORT/DB/USER/PASSWORD`), o banco usado pelos testes (`POSTGRES_TEST_DB`) e a configuração do RabbitMQ usada só pelo publisher (`RABBITMQ_*`, ver seção [Publisher](#publisher-analysis_jobs--rabbitmq)). Nunca commitar o `.env` — use `.env.example` como referência.
