@@ -290,6 +290,35 @@ Adicionar, desabilitar ou editar um termo é só mudar o YAML — a próxima exe
 - **Deduplicação por `content_hash`** é calculada e indexada, mas **não consolida automaticamente** dois artigos nesta versão — fica disponível para uma futura rotina de detecção de republicação, sem apagar registros.
 - Para domínios que bloqueiam sistematicamente e exigirem alta confiabilidade de texto completo, a alternativa é uma API de notícias licenciada (ex: NewsAPI.org, GNews, SerpApi) — não implementado aqui, fica como opção futura.
 
+## Entidades-alvo do Classifier
+
+O `classifier-prisma` exporta a lista de entidades no escopo da v1 (candidatos a presidente/vice-presidente + partidos vinculados, critério TSE `ds_cargo IN ('PRESIDENTE', 'VICE-PRESIDENTE')`). Formato e cadência confirmados com o time do Classifier em 2026-08-29:
+
+- **Geração sob demanda, não agendada.** A lista de candidatos muda por evento raro e conhecido (substituição, impugnação, desistência), não por tempo — regerar todo dia seria trabalho automático para um dado que quase nunca muda. O Classifier gera um novo export e avisa quando a lista mudar de verdade (registrado do lado deles em `pendencias-tecnicas.md`). Uma rede de segurança futura (job semanal que regera e avisa se algo mudou sem aviso prévio) é uma melhoria opcional, não bloqueia a v1.
+- **`entity_id` é a mesma chave usada em `app_db2`** (`nr_titulo_eleitoral_candidato` para políticos, `nr_partido` para partidos) — permite cruzar dado com o Classifier sem duplicar lógica de match.
+
+Formato do arquivo (ver `config/target_entities.example.yaml` para um exemplo completo com dado real):
+
+```yaml
+generated_at: "2026-08-29T19:29:23Z"   # ISO 8601, quando o Classifier gerou o export
+schema_version: 1
+source: "classifier-prisma/entidade_matching (TSE 2026, escopo v1: presidente + vice-presidente)"
+entities:
+  - entity_id: '13'                     # nr_partido ou nr_titulo_eleitoral_candidato, sempre tratado como string
+    entity_type: partido                # partido | politico
+    cargo: null                         # PRESIDENTE | VICE-PRESIDENTE | null (só null para partido)
+    nome_principal: PARTIDO DOS TRABALHADORES
+    aliases:
+      - PT
+      - PARTIDO DOS TRABALHADORES
+```
+
+`src/target_entities.py` carrega e valida esse YAML (mesmo padrão de `src/search_terms_store.py`: erros agregados, mensagens citando `entity_id`/campo). Validações incluem: `entity_type` só pode ser `partido`/`politico`; `partido` não pode ter `cargo` preenchido e `politico` precisa ter; `aliases` não pode vir vazio; `entity_id` sem aspas no YAML (ex.: `108563260302`) é normalizado para `str` mesmo se o parser interpretar como inteiro — números de título eleitoral/partido não podem perder zero à esquerda por causa de como o YAML resolve tipos implicitamente. `check_freshness(generated_at, max_age_days)` avisa (sem travar nada) se o export estiver mais velho que o esperado — como a geração é sob demanda, isso é só um sinal informativo, não um erro.
+
+**Decisão registrada**: `config/search_terms.yaml` continua estático (mapeamento manual de 1 alias = 1 termo de busca) — gerar os termos de busca dinamicamente a partir de `target_entities.yaml` foi avaliado e adiado para depois da v1. Motivo: o mapeamento direto já resolve o essencial e é mais fácil de debugar; só vale a complexidade extra se, na prática, for necessário um termo de busca que não está nos aliases do Classifier (ex.: variação regional/abreviação que o TSE não registra).
+
+**Ainda não existe, de propósito**: integração de `target_entities.py` com `src/main.py`. A decisão de como/quando o pipeline de coleta deve consumir essa lista (faseamento) é separada e ainda não foi implementada.
+
 ## Dependências
 
 | Pacote | Por quê |
