@@ -54,8 +54,16 @@ def normalize_url(url: str) -> str:
     return urlunsplit((scheme, netloc, path, query, ""))
 
 
-def extract_canonical_from_html(html: str, base_url: str) -> str | None:
+def extract_canonical_from_html(html: bytes | str, base_url: str) -> str | None:
     """Extrai `<link rel="canonical">` do HTML, se presente e válido.
+
+    Aceita `bytes` (preferível) ou `str`. Com `bytes`, quem detecta o
+    encoding é o próprio parser HTML do lxml/libxml2 (via BOM ou
+    `<meta charset>` no próprio documento) — não duplicamos aqui a lógica
+    de detecção de charset que o `trafilatura` já faz em `article_extractor`.
+    Passar `str` (já decodificado por outra fonte, ex. `response.text`) é
+    o que causava mojibake quando o site não declarava charset no header
+    HTTP e o `requests` caía no fallback Latin-1.
 
     Só aceita o valor se, resolvido contra `base_url`, resultar numa URL
     absoluta http(s) — qualquer outra coisa (relativa quebrada, esquema
