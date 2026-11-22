@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📰 scrapping-prisma
+# scrapping-prisma
 
 **Coletor de notícias políticas do PRISMA**: busca matérias no Google News RSS, extrai o texto completo, deduplica, persiste em PostgreSQL e publica cada artigo no RabbitMQ para classificação.
 
@@ -16,7 +16,7 @@
 
 ---
 
-## 📍 Onde este módulo fica no PRISMA
+## Onde este módulo fica no PRISMA
 
 ```
 [ scrapping-prisma ] ──RabbitMQ──▶ classifier-prisma ──RabbitMQ──▶ analyser-prisma ──▶ System DB ──▶ api-prisma ──▶ app-prisma
@@ -25,21 +25,21 @@
 
 O scraper é a **porta de entrada de dados**. Ele tem banco próprio, e nenhum outro módulo acessa esse banco: a fronteira com o `classifier-prisma` é o RabbitMQ ([ADR 0001](https://github.com/prisma-projetos/experiments-prisma/blob/main/docs/adr/0001-scraper-classifier-rabbitmq-outbox.md)).
 
-## 📑 Sumário
+## Sumário
 
-- [Visão geral](#-visão-geral)
-- [Arquitetura](#-arquitetura)
-- [Modelo de dados](#-modelo-de-dados)
-- [Estrutura do repositório](#-estrutura-do-repositório)
-- [Como rodar](#-como-rodar)
-- [Configuração](#-configuração)
-- [Publisher (analysis_jobs → RabbitMQ)](#-publisher-analysis_jobs--rabbitmq)
-- [Testes](#-testes)
-- [CI/CD e operação](#-cicd-e-operação)
-- [Limitações conhecidas](#-limitações-conhecidas)
-- [Repositórios do PRISMA](#-repositórios-do-prisma)
+- [Visão geral](#visão-geral)
+- [Arquitetura](#arquitetura)
+- [Modelo de dados](#modelo-de-dados)
+- [Estrutura do repositório](#estrutura-do-repositório)
+- [Como rodar](#como-rodar)
+- [Configuração](#configuração)
+- [Publisher (analysis_jobs → RabbitMQ)](#publisher-analysis_jobs--rabbitmq)
+- [Testes](#testes)
+- [CI/CD e operação](#cicd-e-operação)
+- [Limitações conhecidas](#limitações-conhecidas)
+- [Repositórios do PRISMA](#repositórios-do-prisma)
 
-## 🔎 Visão geral
+## Visão geral
 
 | | |
 |---|---|
@@ -52,7 +52,7 @@ O scraper é a **porta de entrada de dados**. Ele tem banco próprio, e nenhum o
 
 **Fora do escopo:** classificar conteúdo (é papel do [`classifier-prisma`](https://github.com/prisma-projetos/classifier-prisma)), contornar bloqueios de sites ou rotacionar IP/proxy.
 
-## 🏗 Arquitetura
+## Arquitetura
 
 ```mermaid
 flowchart LR
@@ -101,7 +101,7 @@ Fluxo por item do RSS:
 5. **Enfileira**: um trigger do Postgres cria o job em `analysis_jobs` **na mesma transação** que marca o artigo como `success`. É o padrão *transactional outbox*.
 6. **Publica**: o publisher drena `analysis_jobs` e envia cada job ao RabbitMQ com confirmação de entrega.
 
-## 🗄 Modelo de dados
+## Modelo de dados
 
 | Tabela | Papel |
 |---|---|
@@ -119,17 +119,17 @@ Fluxo por item do RSS:
 | `pending` | Descoberto, extração ainda não tentada | — |
 | `processing` | Extração em andamento (claim atômico) | — |
 | `success` | Texto completo extraído; dispara o job em `analysis_jobs` | — |
-| `paywalled` | Texto abaixo do limiar configurado (teaser de site pago) | ❌ |
-| `blocked` | O site respondeu HTTP 403/429; não há retry | ❌ |
-| `skipped_robots` | O `robots.txt` proíbe a URL | ✅ (rechecado a cada tentativa) |
-| `empty` | Página sem conteúdo aproveitável | ✅ |
-| `failed` | Erro de rede, timeout ou falha ao decodificar o link | ✅ |
+| `paywalled` | Texto abaixo do limiar configurado (teaser de site pago) | Não |
+| `blocked` | O site respondeu HTTP 403/429; não há retry | Não |
+| `skipped_robots` | O `robots.txt` proíbe a URL | Sim (rechecado a cada tentativa) |
+| `empty` | Página sem conteúdo aproveitável | Sim |
+| `failed` | Erro de rede, timeout ou falha ao decodificar o link | Sim |
 
 </details>
 
 Migrations: scripts numerados em `db/migrations/` (`.sql` para DDL, `.py` para *backfills*), aplicados automaticamente por `src/main.py`, cada um na mesma transação do seu registro em `schema_migrations`. Não há ORM nem Alembic.
 
-## 📂 Estrutura do repositório
+## Estrutura do repositório
 
 ```
 ├── config/
@@ -159,7 +159,7 @@ Migrations: scripts numerados em `db/migrations/` (`.sql` para DDL, `.py` para *
 └── .gitea/workflows/ci-cd.yaml # build → manifestos → ArgoCD
 ```
 
-## 🚀 Como rodar
+## Como rodar
 
 **Pré-requisitos:** Python 3.11+ e Docker.
 
@@ -210,7 +210,7 @@ docker compose exec -T postgres psql -U politica -d politica -c \
 
 </details>
 
-## ⚙ Configuração
+## Configuração
 
 | Arquivo | Conteúdo |
 |---|---|
@@ -223,9 +223,9 @@ docker compose exec -T postgres psql -U politica -d politica -c \
 
 | Campo | Obrigatório | Descrição |
 |---|---|---|
-| `id` | ✅ | Identificador único e estável |
-| `query` | ✅ | Consulta enviada ao Google News |
-| `category` | ✅ | `politician`, `party`, `topic`, … (texto livre) |
+| `id` | Sim | Identificador único e estável |
+| `query` | Sim | Consulta enviada ao Google News |
+| `category` | Sim | `politician`, `party`, `topic`, … (texto livre) |
 | `entity` / `topic` | — | Entidade principal e tema relacionado |
 | `retrieval_type` | — | `neutral` (padrão), `opinion_query`, `entity_topic` ou `event` |
 | `enabled` | — | Padrão `true`. Só termos habilitados são executados |
@@ -243,7 +243,7 @@ docker compose exec -T postgres psql -U politica -d politica -c \
 | `RABBITMQ_VHOST` | `/` | Virtual host |
 | `RABBITMQ_EXCHANGE` | `scraper.entrada.exchange` | Exchange `direct`, durável |
 | `RABBITMQ_QUEUE` | `scraper.dados.queue` | Fila consumida pelo classifier |
-| `RABBITMQ_ROUTING_KEY` | valor de `RABBITMQ_QUEUE` | ⚠ Ainda é uma hipótese, a confirmar com a infra |
+| `RABBITMQ_ROUTING_KEY` | valor de `RABBITMQ_QUEUE` | Ainda é uma hipótese, a confirmar com a infra |
 | `RABBITMQ_DURABLE` | `true` | Mensagens persistentes (`delivery_mode=2`) |
 
 <details>
@@ -267,7 +267,7 @@ Guia completo: [`scraper-como-atualizar-target-entities.md`](https://github.com/
 
 </details>
 
-## 📤 Publisher (analysis_jobs → RabbitMQ)
+## Publisher (analysis_jobs → RabbitMQ)
 
 `src/publish_jobs.py` roda uma vez e sai: `exit 0` quando publica tudo e `exit 1` quando algum job falha ou o broker está inacessível.
 
@@ -279,7 +279,7 @@ Guia completo: [`scraper-como-atualizar-target-entities.md`](https://github.com/
 
 > O publisher **não declara** exchange, fila nem binding. A topologia (incluindo a DLQ `scraper.dados.dlq`) é provisionada pela infra. Declarar algo com argumentos divergentes causaria `PRECONDITION_FAILED`.
 
-## 🧪 Testes
+## Testes
 
 ```bash
 docker compose up -d postgres
@@ -293,7 +293,7 @@ pytest tests/test_jobs_publisher.py     # apenas o publisher
 
 Cobertura principal: validação de YAML, sync idempotente de termos, deduplicação por `guid` e por URL canônica, snapshot de match, trigger do outbox, concorrência no find-or-create, idempotência do publisher e circuit breaker.
 
-## 🔁 CI/CD e operação
+## CI/CD e operação
 
 | Etapa | Como |
 |---|---|
@@ -306,7 +306,7 @@ Cobertura principal: validação de YAML, sync idempotente de termos, deduplica�
 */15 * * * * cd /srv/scrapping-prisma && .venv/bin/python src/publish_jobs.py >> logs/cron.log 2>&1
 ```
 
-## ⚠ Limitações conhecidas
+## Limitações conhecidas
 
 - **Bloqueio de IPs de datacenter**: uma parte dos artigos termina como `blocked`. Isso é tratado como falha parcial esperada, e os metadados ficam salvos. Não há, e não deve haver, mecanismo para burlar bloqueios.
 - **Link do Google News**: deixou de ser um redirect simples. `googlenewsdecoder` decodifica o token público do feed.
@@ -330,14 +330,14 @@ Cobertura principal: validação de YAML, sync idempotente de termos, deduplica�
 
 </details>
 
-## 🧭 Repositórios do PRISMA
+## Repositórios do PRISMA
 
 | Repositório | Papel |
 |---|---|
 | [`.github`](https://github.com/prisma-projetos) | Página da organização |
-| **`scrapping-prisma`** | 📰 Coleta de notícias *(este)* |
-| [`classifier-prisma`](https://github.com/prisma-projetos/classifier-prisma) | 🏷 Identificação de entidades e classificação do teor |
-| [`analyser-prisma`](https://github.com/prisma-projetos/analyser-prisma) | 🧠 Resumos e panoramas com LLM |
-| [`api-prisma`](https://github.com/prisma-projetos/api-prisma) | 🔌 API REST somente leitura |
-| [`app-prisma`](https://github.com/prisma-projetos/app-prisma) | 🖥 Interface web |
-| [`experiments-prisma`](https://github.com/prisma-projetos/experiments-prisma) | 🔬 Documentação, ADRs e experimentos do artigo |
+| **`scrapping-prisma`** | Coleta de notícias *(este)* |
+| [`classifier-prisma`](https://github.com/prisma-projetos/classifier-prisma) | Identificação de entidades e classificação do teor |
+| [`analyser-prisma`](https://github.com/prisma-projetos/analyser-prisma) | Resumos e panoramas com LLM |
+| [`api-prisma`](https://github.com/prisma-projetos/api-prisma) | API REST somente leitura |
+| [`app-prisma`](https://github.com/prisma-projetos/app-prisma) | Interface web |
+| [`experiments-prisma`](https://github.com/prisma-projetos/experiments-prisma) | Documentação, ADRs e experimentos do artigo |
