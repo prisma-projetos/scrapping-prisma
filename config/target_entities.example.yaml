@@ -1,0 +1,277 @@
+generated_at: '2026-08-29T19:29:23Z'
+schema_version: 1
+source: 'classifier-prisma/entidade_matching (TSE 2026, escopo v1: presidente + vice-presidente)'
+entities:
+- entity_id: '70'
+  entity_type: partido
+  cargo: null
+  nome_principal: AVANTE
+  aliases:
+  - AVANTE
+- entity_id: '27'
+  entity_type: partido
+  cargo: null
+  nome_principal: DEMOCRACIA CRISTÃ
+  aliases:
+  - DC
+  - DEMOCRACIA CRISTÃ
+- entity_id: '35'
+  entity_type: partido
+  cargo: null
+  nome_principal: DEMOCRATA
+  aliases:
+  - DEMOCRATA
+- entity_id: '21'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO COMUNISTA BRASILEIRO
+  aliases:
+  - PCB
+  - PARTIDO COMUNISTA BRASILEIRO
+- entity_id: '29'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO DA CAUSA OPERÁRIA
+  aliases:
+  - PCO
+  - PARTIDO DA CAUSA OPERÁRIA
+- entity_id: '13'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO DOS TRABALHADORES
+  aliases:
+  - PT
+  - PARTIDO DOS TRABALHADORES
+- entity_id: '22'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO LIBERAL
+  aliases:
+  - PL
+  - PARTIDO LIBERAL
+- entity_id: '14'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO MISSÃO
+  aliases:
+  - PARTIDO MISSÃO
+- entity_id: '30'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO NOVO
+  aliases:
+  - PARTIDO NOVO
+- entity_id: '28'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO RENOVADOR TRABALHISTA BRASILEIRO
+  aliases:
+  - PRTB
+  - PARTIDO RENOVADOR TRABALHISTA BRASILEIRO
+- entity_id: '55'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO SOCIAL DEMOCRÁTICO
+  aliases:
+  - PSD
+  - PARTIDO SOCIAL DEMOCRÁTICO
+- entity_id: '16'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO SOCIALISTA  DOS TRABALHADORES UNIFICADO
+  aliases:
+  - PSTU
+  - PARTIDO SOCIALISTA  DOS TRABALHADORES UNIFICADO
+- entity_id: '40'
+  entity_type: partido
+  cargo: null
+  nome_principal: PARTIDO SOCIALISTA BRASILEIRO
+  aliases:
+  - PSB
+  - PARTIDO SOCIALISTA BRASILEIRO
+- entity_id: '80'
+  entity_type: partido
+  cargo: null
+  nome_principal: UNIDADE POPULAR
+  aliases:
+  - UP
+  - UNIDADE POPULAR
+- entity_id: 016286701775
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: ALFREDO GASPAR DE MENDONÇA NETO
+  aliases:
+  - ALFREDO GASPAR DE MENDONÇA NETO
+  - ALFREDO GASPAR
+- entity_id: '214269110167'
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: ANTONIO CARLOS SILVA
+  aliases:
+  - ANTONIO CARLOS SILVA
+  - ANTÔNIO CARLOS
+- entity_id: 040815250400
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: AROLDO MEDINA
+  aliases:
+  - AROLDO MEDINA
+  - CORONEL MEDINA
+- entity_id: 098853820116
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: AUGUSTO JORGE CURY
+  aliases:
+  - AUGUSTO JORGE CURY
+  - ESCRITOR AUGUSTO CURY
+- entity_id: 028390471848
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: CLARIANA ZACARKIM BARAO
+  aliases:
+  - CLARIANA ZACARKIM BARAO
+  - CLARIANA BARAO
+- entity_id: '101707320116'
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: CLEUSA DOS SANTOS
+  aliases:
+  - CLEUSA DOS SANTOS
+  - CLEUSA SANTOS
+- entity_id: '000221640132'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: EDMILSON SILVA COSTA
+  aliases:
+  - EDMILSON SILVA COSTA
+  - EDMILSON COSTA
+- entity_id: '071627330620'
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: FABIANA CRISTINA TAVARES TORQUATO
+  aliases:
+  - FABIANA CRISTINA TAVARES TORQUATO
+  - FABIANA TORQUATO
+- entity_id: '108563260302'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: FLAVIO NANTES BOLSONARO
+  aliases:
+  - FLAVIO NANTES BOLSONARO
+  - FLAVIO BOLSONARO
+- entity_id: '035204110175'
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: GERALDO JOSE RODRIGUES ALCKMIN FILHO
+  aliases:
+  - GERALDO JOSE RODRIGUES ALCKMIN FILHO
+  - GERALDO ALCKMIN
+- entity_id: 086302290191
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: GILBERTO KASSAB
+  aliases:
+  - GILBERTO KASSAB
+- entity_id: 020750351180
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: HERTZ DA CONCEICAO DIAS
+  aliases:
+  - HERTZ DA CONCEICAO DIAS
+  - HERTZ DIAS
+- entity_id: 045237680299
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: JULIO CESAR DELGADO
+  aliases:
+  - JULIO CESAR DELGADO
+  - JÚLIO DELGADO
+- entity_id: 032488231082
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: LEONARDO ALVES DE ARAUJO
+  aliases:
+  - LEONARDO ALVES DE ARAUJO
+  - LEONARDO AVALANCHE
+- entity_id: 033294250795
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: LUIS EDUARDO GRANGEIRO GIRÃO
+  aliases:
+  - LUIS EDUARDO GRANGEIRO GIRÃO
+  - EDUARDO GIRÃO
+- entity_id: '122418060191'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: LUIZ INÁCIO LULA DA SILVA
+  aliases:
+  - LUIZ INÁCIO LULA DA SILVA
+  - LULA
+- entity_id: 049143831023
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: PABLO HENRIQUE COSTA MARCAL
+  aliases:
+  - PABLO HENRIQUE COSTA MARCAL
+  - PABLO MARÇAL
+- entity_id: 059412101309
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: RAQUEL NONATO DE BRICIO
+  aliases:
+  - RAQUEL NONATO DE BRICIO
+  - RAQUEL BRÍCIO
+- entity_id: '317965770183'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: RENAN ANTONIO FERREIRA DOS SANTOS
+  aliases:
+  - RENAN ANTONIO FERREIRA DOS SANTOS
+  - RENAN SANTOS
+- entity_id: 032101610299
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: ROMEU ZEMA NETO
+  aliases:
+  - ROMEU ZEMA NETO
+  - ZEMA
+- entity_id: 003087571031
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: RONALDO RAMOS CAIADO
+  aliases:
+  - RONALDO RAMOS CAIADO
+  - RONALDO CAIADO
+- entity_id: 099286850183
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: RUI COSTA PIMENTA
+  aliases:
+  - RUI COSTA PIMENTA
+- entity_id: '167724820272'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: SAMARA MARTINS DA SILVA FEITOSA
+  aliases:
+  - SAMARA MARTINS DA SILVA FEITOSA
+- entity_id: 026613890310
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: SUÊD HAIDAR NOGUEIRA
+  aliases:
+  - SUÊD HAIDAR NOGUEIRA
+  - SUÊD HAIDAR
+- entity_id: 084338920205
+  entity_type: politico
+  cargo: VICE-PRESIDENTE
+  nome_principal: VANESSA PORTUGAL BARBOSA
+  aliases:
+  - VANESSA PORTUGAL BARBOSA
+  - VANESSA PORTUGAL
+- entity_id: '167826450108'
+  entity_type: politico
+  cargo: PRESIDENTE
+  nome_principal: WILSON GRASSI JUNIOR
+  aliases:
+  - WILSON GRASSI JUNIOR
+  - VETERINÁRIO WILSON GRASSI

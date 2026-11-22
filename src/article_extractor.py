@@ -34,6 +34,22 @@ def resolve_google_link(google_link: str, *, interval: int = 1) -> ResolvedLink:
     return ResolvedLink(resolved_link=decoded["decoded_url"], error=None)
 
 
+def _has_declared_charset(headers) -> bool:
+    """True se o header `Content-Type` da resposta declarar um parâmetro
+    `charset` explicitamente.
+
+    Isso importa porque `requests` (via `get_encoding_from_headers`)
+    retorna "ISO-8859-1" tanto quando o site declarou esse charset de
+    propósito quanto quando não declarou charset nenhum e o content-type
+    é `text/*` — nesse segundo caso é só o fallback do RFC 2616 aplicado
+    às cegas, não uma informação real do site. `response.encoding` sozinho
+    não distingue os dois casos. O sinal confiável é olhar o header bruto:
+    o parâmetro `charset=` só aparece ali quando foi mesmo declarado.
+    """
+    content_type = headers.get("Content-Type", "")
+    return "charset=" in content_type.lower()
+
+
 @dataclass
 class ExtractionResult:
     resolved_link: str | None
@@ -91,9 +107,28 @@ def extract_article(resolved_link: str, settings: dict) -> ExtractionResult:
         )
 
     final_url = response.url
-    html_canonical_link = extract_canonical_from_html(response.text, final_url)
+    # Mitigação híbrida pro bug de mojibake (~9,1% dos artigos, ex.:
+    # "TarcÃsio" em vez de "Tarcísio"):
+    #
+    # - Se o site declara charset explicitamente no `Content-Type`,
+    #   confiamos nisso e usamos `response.text` (já decodificado
+    #   corretamente pelo `requests` com o charset declarado) — evita o
+    #   risco de o `charset_normalizer` (heurística estatística usada por
+    #   lxml/trafilatura a partir dos bytes) confundir encodings de 1 byte
+    #   parecidos entre si (ex.: Latin-1 com cp1250 nas vogais nasais ã/õ).
+    # - Se o site NÃO declara charset, `requests` aplica Latin-1 como
+    #   fallback cego (RFC 2616) mesmo quando o corpo real está em UTF-8 —
+    #   causa raiz confirmada do bug. Nesse caso usamos `response.content`
+    #   (bytes crus) e deixamos lxml/trafilatura detectarem o encoding real
+    #   a partir do próprio conteúdo.
+    if _has_declared_charset(response.headers):
+        html_source = response.text
+    else:
+        html_source = response.content
 
-    document = trafilatura.bare_extraction(response.text, url=final_url, with_metadata=True)
+    html_canonical_link = extract_canonical_from_html(html_source, final_url)
+
+    document = trafilatura.bare_extraction(html_source, url=final_url, with_metadata=True)
     text = document.text if document else None
     author = document.author if document else None
 
